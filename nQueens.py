@@ -88,7 +88,7 @@ def generate_clauses(N):
 def solve_n_queens():
     N=int(input('enter the number of queens\n'))
     cnf_clauses = generate_clauses(N)
-    solver = Solver(name='m22')
+    solver = Solver(name='g3')
     for clause in cnf_clauses:
         solver.add_clause(clause) 
     result = solver.solve()
