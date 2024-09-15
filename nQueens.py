@@ -85,22 +85,30 @@ def generate_clauses(N):
             print(clause)
     return clauses
 
+#add blocking clause generate other solutions
+def add_blocking_clause(solver,queens_position):
+    blocking_clause = [-pos for pos in queens_position]
+    solver.add_clause(blocking_clause)
+
 def solve_n_queens():
     N=int(input('enter the number of queens\n'))
     cnf_clauses = generate_clauses(N)
     solver = Solver(name='g3')
     for clause in cnf_clauses:
-        solver.add_clause(clause) 
-    result = solver.solve()
-    if result:
-        print ("Satisfiable")
-        model = solver.get_model()
-        print("Solution: ",model)
-        for i in model:
-            if i>0:
-                print("O", end=' ')
-            else: print("X", end=' ')
-            if( abs(i)%N==0):
-                print (" ")
+        solver.add_clause(clause)
+    if solver.solve():
+        while solver.solve():
+            queens_position = []
+            print ("Satisfiable")
+            model = solver.get_model()
+            print("Solution: ",model)
+            for i in model:
+                if i>0:
+                    print("Q", end=' ')
+                    queens_position.append(i)
+                else: print(".", end=' ')
+                if( abs(i)%N==0):
+                    print (" ")
+            add_blocking_clause(solver,queens_position)
     else: print ("Unsatisfiable")
 solve_n_queens()
